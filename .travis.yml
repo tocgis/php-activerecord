@@ -8,7 +8,7 @@ before_script:
 services:
   - memcache
 
-env: PHPAR_MYSQL=mysql://root:password@127.0.0.1/phpar_test PHPAR_PGSQL=pgsql://postgres:password@127.0.0.1/phpar_test
+##env: PHPAR_MYSQL=mysql://root:password@127.0.0.1/phpar_test PHPAR_PGSQL=pgsql://postgres:password@127.0.0.1/phpar_test
 
 language: php
 php:
