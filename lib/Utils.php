@@ -38,26 +38,26 @@ use \Closure;
 
 function classify($class_name, $singularize=false)
 {
-	if ($singularize)
+    if ($singularize)
     $class_name = Utils::singularize($class_name);
 
-	$class_name = Inflector::instance()->camelize($class_name);
-	return ucfirst($class_name);
+    $class_name = Inflector::instance()->camelize($class_name);
+    return ucfirst($class_name);
 }
 
 // http://snippets.dzone.com/posts/show/4660
 function array_flatten(array $array)
 {
-	$i = 0;
+    $i = 0;
 
-	while ($i < count($array))
-	{
-		if (is_array($array[$i]))
-			array_splice($array,$i,1,$array[$i]);
-		else
-			++$i;
-	}
-	return $array;
+    while ($i < count($array))
+    {
+        if (is_array($array[$i]))
+            array_splice($array,$i,1,$array[$i]);
+        else
+            ++$i;
+    }
+    return $array;
 }
 
 /**
@@ -65,11 +65,11 @@ function array_flatten(array $array)
  */
 function is_hash(&$array)
 {
-	if (!is_array($array))
-		return false;
+    if (!is_array($array))
+        return false;
 
-	$keys = array_keys($array);
-	return @is_string($keys[0]) ? true : false;
+    $keys = array_keys($array);
+    return @is_string($keys[0]) ? true : false;
 }
 
 /**
@@ -81,36 +81,36 @@ function is_hash(&$array)
  */
 function denamespace($class_name)
 {
-	if (is_object($class_name))
-		$class_name = get_class($class_name);
+    if (is_object($class_name))
+        $class_name = get_class($class_name);
 
-	if (has_namespace($class_name))
-	{
-		$parts = explode('\\', $class_name);
-		return end($parts);
-	}
-	return $class_name;
+    if (has_namespace($class_name))
+    {
+        $parts = explode('\\', $class_name);
+        return end($parts);
+    }
+    return $class_name;
 }
 
 function get_namespaces($class_name)
 {
-	if (has_namespace($class_name))
-		return explode('\\', $class_name);
-	return null;
+    if (has_namespace($class_name))
+        return explode('\\', $class_name);
+    return null;
 }
 
 function has_namespace($class_name)
 {
-	if (strpos($class_name, '\\') !== false)
-		return true;
-	return false;
+    if (strpos($class_name, '\\') !== false)
+        return true;
+    return false;
 }
 
 function has_absolute_namespace($class_name)
 {
-	if (strpos($class_name, '\\') === 0)
-		return true;
-	return false;
+    if (strpos($class_name, '\\') === 0)
+        return true;
+    return false;
 }
 
 /**
@@ -121,26 +121,26 @@ function has_absolute_namespace($class_name)
  */
 function all($needle, array $haystack)
 {
-	foreach ($haystack as $value)
-	{
-		if ($value !== $needle)
-			return false;
-	}
-	return true;
+    foreach ($haystack as $value)
+    {
+        if ($value !== $needle)
+            return false;
+    }
+    return true;
 }
 
 function collect(&$enumerable, $name_or_closure)
 {
-	$ret = array();
+    $ret = array();
 
-	foreach ($enumerable as $value)
-	{
-		if (is_string($name_or_closure))
-			$ret[] = is_array($value) ? $value[$name_or_closure] : $value->$name_or_closure;
-		elseif ($name_or_closure instanceof Closure)
-			$ret[] = $name_or_closure($value);
-	}
-	return $ret;
+    foreach ($enumerable as $value)
+    {
+        if (is_string($name_or_closure))
+            $ret[] = is_array($value) ? $value[$name_or_closure] : $value->$name_or_closure;
+        elseif ($name_or_closure instanceof Closure)
+            $ret[] = $name_or_closure($value);
+    }
+    return $ret;
 }
 
 /**
@@ -148,17 +148,17 @@ function collect(&$enumerable, $name_or_closure)
  */
 function wrap_strings_in_arrays(&$strings)
 {
-	if (!is_array($strings))
-		$strings = array(array($strings));
-	else 
-	{
-		foreach ($strings as &$str)
-		{
-			if (!is_array($str))
-				$str = array($str);
-		}
-	}
-	return $strings;
+    if (!is_array($strings))
+        $strings = array(array($strings));
+    else 
+    {
+        foreach ($strings as &$str)
+        {
+            if (!is_array($str))
+                $str = array($str);
+        }
+    }
+    return $strings;
 }
 
 /**
@@ -168,62 +168,62 @@ function wrap_strings_in_arrays(&$strings)
  */
 class Utils
 {
-	public static function extract_options($options)
-	{
-		return is_array(end($options)) ? end($options) : array();
-	}
+    public static function extract_options($options)
+    {
+        return is_array(end($options)) ? end($options) : array();
+    }
 
-	public static function add_condition(&$conditions=array(), $condition, $conjuction='AND')
-	{
-		if (is_array($condition))
-		{
-			if (empty($conditions))
-				$conditions = array_flatten($condition);
-			else
-			{
-				$conditions[0] .= " $conjuction " . array_shift($condition);
-				$conditions[] = array_flatten($condition);
-			}
-		}
-		elseif (is_string($condition))
-			$conditions[0] .= " $conjuction $condition";
+    public static function add_condition(&$conditions=array(), $condition, $conjuction='AND')
+    {
+        if (is_array($condition))
+        {
+            if (empty($conditions))
+                $conditions = array_flatten($condition);
+            else
+            {
+                $conditions[0] .= " $conjuction " . array_shift($condition);
+                $conditions[] = array_flatten($condition);
+            }
+        }
+        elseif (is_string($condition))
+            $conditions[0] .= " $conjuction $condition";
 
-		return $conditions;
-	}
+        return $conditions;
+    }
 
-	public static function human_attribute($attr)
-	{
-		$inflector = Inflector::instance();
-		$inflected = $inflector->variablize($attr);
-		$normal = $inflector->uncamelize($inflected);
+    public static function human_attribute($attr)
+    {
+        $inflector = Inflector::instance();
+        $inflected = $inflector->variablize($attr);
+        $normal = $inflector->uncamelize($inflected);
 
-		return ucfirst(str_replace('_', ' ', $normal));
-	}
+        return ucfirst(str_replace('_', ' ', $normal));
+    }
 
-	public static function is_odd($number)
-	{
-		return $number & 1;
-	}
+    public static function is_odd($number)
+    {
+        return $number & 1;
+    }
 
-	public static function is_a($type, $var)
-	{
-		switch($type)
-		{
-			case 'range':
-				if (is_array($var) && (int)$var[0] < (int)$var[1])
-					return true;
+    public static function is_a($type, $var)
+    {
+        switch($type)
+        {
+            case 'range':
+                if (is_array($var) && (int)$var[0] < (int)$var[1])
+                    return true;
 
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public static function is_blank($var)
-	{
-		return 0 === strlen($var);
-	}
+    public static function is_blank($var)
+    {
+        return 0 === strlen($var);
+    }
 
-	private static $plural = array(
+    private static $plural = array(
         '/(quiz)$/i'               => "$1zes",
         '/^(ox)$/i'                => "$1en",
         '/([m|l])ouse$/i'          => "$1ice",
@@ -358,9 +358,9 @@ class Utils
             return self::pluralize($string);
     }
 
-	public static function squeeze($char, $string)
-	{
-		return preg_replace("/$char+/",$char,$string);
-	}
+    public static function squeeze($char, $string)
+    {
+        return preg_replace("/$char+/",$char,$string);
+    }
 };
 ?>
