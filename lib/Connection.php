@@ -318,8 +318,9 @@ abstract class Connection
         $this->last_query = $sql;
 
         try {
-            if (!($sth = $this->connection->prepare($sql)))
+            if (!($sth = $this->connection->prepare($sql))) {
                 throw new DatabaseException($this);
+            }
         } catch (PDOException $e) {
             throw new DatabaseException($this);
         }
@@ -327,10 +328,11 @@ abstract class Connection
         $sth->setFetchMode(PDO::FETCH_ASSOC);
 
         try {
-            if (!$sth->execute($values))
+            if (!$sth->execute($values)) {
                 throw new DatabaseException($this);
+            }
         } catch (PDOException $e) {
-            throw new DatabaseException($e->getMessage());
+            throw new DatabaseException($e);
         }
         return $sth;
     }
@@ -359,8 +361,9 @@ abstract class Connection
     {
         $sth = $this->query($sql);
 
-        while (($row = $sth->fetch(PDO::FETCH_ASSOC)))
+        while (($row = $sth->fetch(PDO::FETCH_ASSOC))) {
             $handler($row);
+        }
     }
 
     /**
@@ -373,8 +376,9 @@ abstract class Connection
         $tables = array();
         $sth = $this->query_for_tables();
 
-        while (($row = $sth->fetch(PDO::FETCH_NUM)))
+        while (($row = $sth->fetch(PDO::FETCH_NUM))) {
             $tables[] = $row[0];
+        }
 
         return $tables;
     }
@@ -384,8 +388,9 @@ abstract class Connection
      */
     public function transaction()
     {
-        if (!$this->connection->beginTransaction())
+        if (!$this->connection->beginTransaction()) {
             throw new DatabaseException($this);
+        }
     }
 
     /**
@@ -393,8 +398,9 @@ abstract class Connection
      */
     public function commit()
     {
-        if (!$this->connection->commit())
+        if (!$this->connection->commit()) {
             throw new DatabaseException($this);
+        }
     }
 
     /**
@@ -402,8 +408,9 @@ abstract class Connection
      */
     public function rollback()
     {
-        if (!$this->connection->rollback())
+        if (!$this->connection->rollback()) {
             throw new DatabaseException($this);
+        }
     }
 
     /**
@@ -484,8 +491,9 @@ abstract class Connection
         $date = date_create($string);
         $errors = \DateTime::getLastErrors();
 
-        if ($errors['warning_count'] > 0 || $errors['error_count'] > 0)
+        if ($errors['warning_count'] > 0 || $errors['error_count'] > 0) {
             return null;
+        }
 
         return new DateTime($date->format(static::$datetime_format));
     }
