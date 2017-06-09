@@ -69,7 +69,10 @@ function is_hash(&$array)
         return false;
 
     $keys = array_keys($array);
-    return @is_string($keys[0]) ? true : false;
+
+    if ($keys)
+       return @is_string($keys[0]) ? true : false;
+    else return false;
 }
 
 /**
@@ -150,7 +153,7 @@ function wrap_strings_in_arrays(&$strings)
 {
     if (!is_array($strings))
         $strings = array(array($strings));
-    else 
+    else
     {
         foreach ($strings as &$str)
         {
