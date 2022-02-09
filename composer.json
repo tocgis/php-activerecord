@@ -1,6 +1,6 @@
 {
     "name": "tocgis/php-activerecord",
-    "version": "1.0.8",
+    "version": "1.0.10",
     "type": "library",
     "description": "tocgis project from php-activerecord is an open source ORM library based on the ActiveRecord pattern.",
     "keywords": ["activerecord", "orm"],
